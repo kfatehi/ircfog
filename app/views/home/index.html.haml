@@ -1,4 +1,7 @@
 %h3 Home
-- @users.each do |user|
-  %p
-    User: #{link_to user.name, user}
+- if user_signed_in?
+  = render 'networks'
+  = render 'chat'
+- else
+  %p Welcome -- please sign in or create an account
+  

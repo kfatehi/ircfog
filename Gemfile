@@ -22,6 +22,7 @@ group :development do
   gem 'hub', :require=>nil
   gem 'quiet_assets'
   gem 'better_errors'
+  gem 'binding_of_caller'
   gem 'rb-fchange', :require=>false
   gem 'rb-fsevent', :require=>false
   gem 'rb-inotify', :require=>false

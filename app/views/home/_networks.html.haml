@@ -1,0 +1,7 @@
+#networks{'ng-controller'=>"NetworksCtrl"}
+  %h4 Networks
+  %ul
+    %li{'ng-repeat'=>'network in networks'}
+      %input{:type=>'checkbox', 'ng-model'=>'network.connected'}
+      %span.name {{network.name}}
+  = link_to "Add Network", "", "ng-click" => "addNetwork()"
