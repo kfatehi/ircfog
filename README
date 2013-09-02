@@ -17,3 +17,28 @@ Preferences:
 ________________________
 
 License
+
+MIT
+
+--------
+
+Using the Bot
+
+```ruby
+require 'ircfog/bot'
+
+$bot = Cinch::Bot.new do
+  configure do |c|
+    #c.logger
+    #c.nick "ircfog-bot"
+    c.server = "irc.freenode.org"
+    c.channels = ["#ircfog"]
+  end
+  # self.loggers << Rails.logger
+  on :message, /^!(.+)/ do |m, query|
+    m.reply "What is #{query}?"
+  end
+end
+
+# Ircfog::Bot.start_in_thread $bot
+```

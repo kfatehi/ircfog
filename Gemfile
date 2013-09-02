@@ -13,6 +13,7 @@ gem 'devise'
 gem 'devise_invitable'
 gem 'figaro'
 gem 'haml-rails'
+gem 'cinch'
 group :development do
   gem 'guard-bundler'
   gem 'guard-cucumber'
