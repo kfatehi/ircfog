@@ -8,6 +8,12 @@ describe ZNC do
     @user = FactoryGirl.create(:user)
   end
 
+  describe "#status" do
+    it "returns the znc status interface user" do
+      subject.status.nick.should eq "*status"
+    end
+  end
+
   describe "#admin" do
     it "returns the znc admin interface user" do
       subject.admin.nick.should eq "*admin"
