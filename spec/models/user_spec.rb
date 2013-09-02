@@ -15,6 +15,10 @@ describe User do
     User.create!(@attr)
   end
 
+  it "is given a random znc_username" do
+    User.create!(@attr).znc_username.should_not be_nil
+  end
+
   it "should require an email address" do
     no_email_user = User.new(@attr.merge(:email => ""))
     no_email_user.should_not be_valid

@@ -2,8 +2,10 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-window.ChatWindow = ($scope) ->
-  $scope.buffer = ""
+window.NetworksCtrl = ($scope) ->
+  $scope.networks = [
+    {name: "Freenode", connected: false}
+  ]
 
-  $scope.send_message = (message) ->
-    $scope.buffer << message
+  $scope.addNetwork = ->
+    console.log "hi"
