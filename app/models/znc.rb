@@ -38,8 +38,22 @@ module ZNC
       return messages
     end
 
-    def add_user user
-      #@bot.channels.first.msg "adduser #{user.znc_username}"
+    def add_user user 
+      messages = []
+      @@handler = @bot.on(:private) do |m|
+        if m.user.nick == "*admin"
+          messages << m
+        end
+      end
+      admin.privmsg("AddUser #{user.znc_username} #{user.znc_username.reverse}")
+      loop do 
+        if messages.count > 0 &&
+          messages.first.message.match(/User(.*)added!/)
+            break
+        end
+      end
+      @@handler.unregister
+      return messages
     end
 
     def users

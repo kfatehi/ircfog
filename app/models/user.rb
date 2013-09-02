@@ -8,7 +8,11 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   before_create do
-    self.znc_username = SecureRandom.uuid[0..7]
+    self.znc_username = "U#{SecureRandom.uuid[0..7]}"
+  end
+
+  def znc_password
+    self.znc_username.reverse
   end
 
   def networks

@@ -1,6 +1,9 @@
 require 'spec_helper'
 require 'pry'
+
+
 describe ZNC do
+    
   before do
     @user = FactoryGirl.create(:user)
   end
@@ -15,6 +18,12 @@ describe ZNC do
     it "responds with ListUsers table" do
       reply = ZNC.list_users.map(&:message).join("\n")
       reply.should include "Username"
+    end
+  end
+
+  describe "#users" do
+    it "returns the Ircfog users in the ZNC config" do
+      ZNC.users.should be_empty
     end
   end
 
