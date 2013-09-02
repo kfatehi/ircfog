@@ -9,12 +9,23 @@ module Ircfog
           @bot.start
           puts "Bot started"
         end
+        wait_until_connected
+        puts "Bot connected"
         at_exit do
           puts "Waiting for irc bot to terminate ... "
           @thread.terminate
           puts "Bot terminated"
         end
         return true
+      end
+
+      def wait_until_connected
+        count = 0
+        loop do
+          sleep count+=1
+          break if @bot.irc.socket.state == "SSLOK "
+          raise "Timeout" if count == 10
+        end
       end
     end
   end

@@ -1,3 +1,5 @@
+require 'stringio'
+
 module ZNC
   class << self
     def bot
@@ -9,15 +11,40 @@ module ZNC
           c.nicks = ["#{ENV['ZNC_ADMIN_NICK']}_#{Rails.env}"]
           c.password = ENV['ZNC_ADMIN_PASS']
         end
-        on :message, /^!(.+)/ do |m, query|
-          m.reply "What is #{query}?"
-        end
       end
     end
 
+    def admin
+      @admin ||= @bot.user_list.find_ensured("*admin")
+    end
+
+    def list_users
+      messages = []
+      @@handler = @bot.on(:private) do |m|
+        if m.user.nick == "*admin"
+          messages << m
+        end
+      end
+      admin.privmsg("ListUsers")
+      loop do 
+        if messages.count > 2 && 
+          messages[0].message.strip.match(/\+-+/) &&
+          messages[2].message.strip.match(/\+-+/) &&
+          messages.last.message.strip.match(/\+-+/)
+            break
+        end
+      end
+      @@handler.unregister
+      return messages
+    end
+
     def add_user user
-      binding.pry
-      @bot.channels.first.msg "adduser #{user.znc_username}"
+      #@bot.channels.first.msg "adduser #{user.znc_username}"
+    end
+
+    def users
+      #@bot.channels.first.msg "listusers minus myself"
+      return [User.last.znc_username]
     end
   end
 end
