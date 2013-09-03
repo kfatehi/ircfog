@@ -1,4 +1,3 @@
-require 'stringio'
 require 'znc_admin'
 
 module ZNC
