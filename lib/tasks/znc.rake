@@ -1,3 +1,6 @@
+require 'znc/config_helpers'
+require 'fileutils'
+
 module ZNCTask
   module Helpers
     ##
@@ -5,24 +8,8 @@ module ZNCTask
     def platform
       require 'rbconfig'
       @platform ||= Class.new do
-        def initialize
-          @os = RbConfig::CONFIG['host_os']
-        end
-
-        def windows?
-          @os =~ /mswin|mingw|cygwin/
-        end
-
         def mac?
-          @os =~ /darwin/
-        end
-
-        def linux?
-          @os =~ /linux/
-        end
-
-        def to_s
-          @os
+          RbConfig::CONFIG['host_os'] =~ /darwin/
         end
       end.new
     end
@@ -32,58 +19,61 @@ module ZNCTask
     def installed? command
       `hash #{command} > /dev/null 2>&1; echo $?`.strip.to_i == 0
     end
-    
-    ##
-    # Install ZNC
-    def install_znc
-      if platform.mac?
-        if installed? 'brew'
-          puts "Install znc with homebrew? (y/N)"
-          res = STDIN.gets.downcase.strip
-          if res != "y"
-            exit 1
-          end
-          system 'brew install znc'
-        else
-          puts "You need homebrew to install ZNC on Mac with this task"
-        end
-      else
-        raise "Can't install ZNC on this OS automatically"
-      end
-    end
 
     ##
     # Check ZNC version
     def version_1_0?
       `znc --version`.match(/1\.0/)
     end
+
+    ##
+    # Assist in installing ZNC on my platform
+    def install_guide
+      if platform.mac?
+        if installed? 'brew'
+          puts "Please install ZNC with Homebrew:"
+          puts "  brew install znc"
+        else
+          puts "Please install ZNC"
+        end
+      else
+        raise "Can't install ZNC on this OS automatically"
+      end
+    end
+
+    include ZNC::ConfigHelpers
   end
 end
 
 namespace :znc do
   include ZNCTask::Helpers
+
+  task :start do
+    if File.directory? config_path
+      system "znc -f -d #{config_path}"
+    else
+      puts "No ZNC config found."
+      puts "If this is a test environment run rake znc:test:prepare"
+    end
+  end
+
   namespace :test do
     ##
     # Installs ZNC 1.0 if not installed
     # Resets the ZNC configuration to defaults for testing
     task :prepare do
       if installed? 'znc'
-        puts "Replace the config file"
+        if version_1_0?
+          use_znc_config("test")
+        else
+          puts "ZNC version mismatch. Please use ZNC v1.0"
+        end
       else
         puts "ZNC is not installed."
-        install_znc
+        install_guide
+        puts "Once installed, run again to configure ZNC for test"
+        exit 1
       end
-      puts "ZNC is now installed"
-      if version_1_0?
-      else
-        puts "ZNC version mismatch. Install ZNC v1.0"
-      end
-      # First: Is it installed ?
-      #        Is it v1.0 ?
-      #
-      # If not, install v1.0
-      # If yes -- reset the configuration
-      # Reuse this code in spec_helper
     end
   end
 end
