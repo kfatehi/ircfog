@@ -1,22 +1,18 @@
-require 'znc_admin/bot'
-require 'znc_admin/list_users'
-require 'znc_admin/add_user'
+require 'znc/admin/bot'
+require 'znc/admin/list_users'
+require 'znc/admin/add_user'
 
 module ZNC
+  CONTROL_NICK = "*controlpanel"
+
   class << self
     include Admin::Bot
     include Admin::ListUsers
     include Admin::AddUser
 
-    def status
-      @status ||= @bot.user_list.find_ensured("*status")
-    end
-
     def admin
-      @admin ||= @bot.user_list.find_ensured("*admin")
+      @admin ||= @bot.user_list.find_ensured(CONTROL_NICK)
     end
-
-
 
     def users
       #@bot.channels.first.msg "listusers minus myself"

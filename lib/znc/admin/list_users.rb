@@ -4,7 +4,7 @@ module ZNC
       def list_users
         messages = []
         @@handler = @bot.on(:private) do |m|
-          if m.user.nick == "*admin"
+          if m.user.nick == CONTROL_NICK
             messages << m
           end
         end

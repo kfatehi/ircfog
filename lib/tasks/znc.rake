@@ -1,52 +1,9 @@
-require 'znc/config_helpers'
-require 'fileutils'
-
-module ZNCTask
-  module Helpers
-    ##
-    # Introspect about the platform
-    def platform
-      require 'rbconfig'
-      @platform ||= Class.new do
-        def mac?
-          RbConfig::CONFIG['host_os'] =~ /darwin/
-        end
-      end.new
-    end
-
-    ##
-    # Check is a program is installed
-    def installed? command
-      `hash #{command} > /dev/null 2>&1; echo $?`.strip.to_i == 0
-    end
-
-    ##
-    # Check ZNC version
-    def version_1_0?
-      `znc --version`.match(/1\.0/)
-    end
-
-    ##
-    # Assist in installing ZNC on my platform
-    def install_guide
-      if platform.mac?
-        if installed? 'brew'
-          puts "Please install ZNC with Homebrew:"
-          puts "  brew install znc"
-        else
-          puts "Please install ZNC"
-        end
-      else
-        raise "Can't install ZNC on this OS automatically"
-      end
-    end
-
-    include ZNC::ConfigHelpers
-  end
-end
+require 'znc/setup'
+require 'znc/config'
 
 namespace :znc do
-  include ZNCTask::Helpers
+  include ZNC::Config
+  include ZNC::Setup
 
   task :start do
     if File.directory? config_path
@@ -64,7 +21,7 @@ namespace :znc do
     task :prepare do
       if installed? 'znc'
         if version_1_0?
-          use_znc_config("test")
+          replace_znc_config("test")
         else
           puts "ZNC version mismatch. Please use ZNC v1.0"
         end

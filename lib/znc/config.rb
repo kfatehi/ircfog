@@ -1,5 +1,7 @@
+require 'fileutils'
+
 module ZNC
-  module ConfigHelpers
+  module Config
     def config_path
       Rails.root.join("config", "znc", "main")
     end
@@ -10,7 +12,7 @@ module ZNC
 
     ##
     # Replace ZNC config with a template
-    def use_znc_config env
+    def replace_znc_config env
       FileUtils.rm_rf(config_path) if File.directory?(config_path)
       FileUtils.cp_r config_template_path(env), config_path
     end

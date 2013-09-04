@@ -1,6 +1,6 @@
 require 'ircfog/bot'
 # level (:debug, :info, :warn, :error, :fatal) (defaults to: event) — The level of the message
-module ZNCAdmin
+module ZNCAdminBot
   class DoubleBotError < StandardError ; end
   def self.init
     if @bot.nil?

@@ -23,8 +23,14 @@ module Ircfog
         count = 2
         loop do
           sleep count+=1
-          break if @bot.irc.socket.state == "SSLOK "
-          raise "Timeout" if count == 10
+          state = @bot.irc.socket.state
+          break if state && state.match(/OK/)
+          if count == 3
+            puts "Bot was unable to connect! (#{3} seconds)"
+            puts "Did you start ZNC?"
+            binding.pry
+            exit 1
+          end
         end
       end
     end
