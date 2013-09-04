@@ -20,7 +20,7 @@ module Ircfog
       end
 
       def wait_until_connected
-        count = 2
+        count = 1
         loop do
           sleep count+=1
           break if @bot.irc.socket.state == "SSLOK "
