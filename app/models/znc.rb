@@ -15,10 +15,11 @@ module ZNC
     end
 
     def users
-      #@bot.channels.first.msg "listusers minus myself"
       users = self.list_users
-      
-      binding.pry
+    end
+
+    def last_user
+      users[3].message.gsub('|', '').split(' ').first 
     end
   end
 end

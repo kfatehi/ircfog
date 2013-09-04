@@ -3,7 +3,8 @@ When(/^I press "(.*?)"$/) do |arg1|
 end
 
 When(/^I fill in "(.*?)" for "(.*?)"$/) do |arg1, arg2|
-  fill_in arg2, with: arg1
+  pending
+  #fill_in arg2, with: arg1
 end
 
 Then(/^I should see "(.*?)" within "(.*?)"$/) do |arg1, arg2|

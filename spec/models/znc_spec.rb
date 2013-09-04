@@ -27,17 +27,9 @@ describe ZNC do
     end
   end
 
-  describe "#users" do
-    it "returns the Ircfog users in the ZNC config" do
-      pending
-      #ZNC.users.should be_empty
-    end
-  end
-
   it "can add users" do
-    pending
-    #ZNC.add_user @user
-    #ZNC.users.should eq [@user.znc_username]
+    ZNC.add_user @user
+    ZNC.last_user.should eq @user.znc_username
   end 
 
   it "can add networks to a user" do
