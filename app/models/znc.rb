@@ -12,6 +12,7 @@ module ZNC
 
     def admin
       @admin ||= @bot.user_list.find_ensured(CONTROL_NICK)
+      binding.pry
     end
 
     def users

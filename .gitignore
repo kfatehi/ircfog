@@ -77,3 +77,4 @@ pickle-email-*.html
 /config/application.yml
 
 /config/znc/main/*
+/db/test.sqlite*

@@ -5,7 +5,7 @@ module Ircfog
         return false if @thread
         @bot = bot
         @thread = Thread.new do
-          puts "Starting irc bot ... "
+          print "Starting irc bot ... "
           @bot.start
           puts "Bot started"
         end
@@ -23,13 +23,14 @@ module Ircfog
         count = 1
         loop do
           sleep count+=1
-          state = @bot.irc.socket.state
-          break if state && state.match(/OK/)
-          if count == 3
-            puts "Bot was unable to connect! (#{3} seconds)"
-            puts "Did you start ZNC?"
-            binding.pry
-            exit 1
+          begin
+            socket = @bot.irc.socket
+            break unless socket.closed?
+            if count == 3
+              puts "Bot was unable to connect! (#{3} seconds)"
+              puts "Did you start ZNC?"
+              exit 1
+            end
           end
         end
       end
