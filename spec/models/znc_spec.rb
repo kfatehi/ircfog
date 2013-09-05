@@ -14,12 +14,6 @@ describe ZNC do
     end
   end
 
-  describe "#admin" do
-    it "returns the znc admin interface user" do
-      subject.admin.nick.should eq "*admin"
-    end
-  end
-
   describe "#list_users" do
     it "responds with ListUsers table" do
       reply = ZNC.list_users.map(&:message).join("\n")
